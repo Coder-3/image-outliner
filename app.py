@@ -1,0 +1,22 @@
+from flask import Flask, render_template, request, send_from_directory
+import cv2
+import os
+
+app = Flask(__name__)
+UPLOAD_FOLDER = 'uploads/'
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        file = request.files['file']
+        lower_threshold = int(request.form.get('lower_threshold', 50))
+        upper_threshold = int(request.form.get('upper_threshold', 150))
+        filename = os.path.join(UPLOAD_FOLDER, file.filename)
+        file.save(filename)
+        # Your conversion function here
+        converted_image_path = convert_image_to_non_transparent_outline(filename, lower_threshold, upper_threshold)
+        return send_from_directory(directory=os.getcwd(), filename=converted_image_path)
+    return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
