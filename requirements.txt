@@ -1,5 +1,5 @@
 Flask==2.0.1
 Werkzeug==2.0.1
-opencv-headless==4.5.1.48
+opencv-headless==4.0.1.24
 gunicorn==20.1.0
 numpy==1.21.5
