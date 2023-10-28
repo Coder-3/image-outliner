@@ -6,10 +6,12 @@ import numpy as np
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
 
-def convert_image_to_non_transparent_outline(image_path, lower_threshold, upper_threshold):
+def convert_image_to_non_transparent_outline_with_clahe(image_path, lower_threshold, upper_threshold):
     image = cv2.imread(image_path, cv2.IMREAD_COLOR)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    contrasted = clahe.apply(gray)
+    blurred = cv2.GaussianBlur(contrasted, (5, 5), 0)
     edges = cv2.Canny(blurred, lower_threshold, upper_threshold)
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     outline = 255 * np.ones_like(gray)
@@ -30,7 +32,7 @@ def index():
         upper_threshold = int(request.form.get('upper_threshold', 150))
         filename = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filename)
-        converted_image_path = convert_image_to_non_transparent_outline(filename, lower_threshold, upper_threshold)
+        converted_image_path = convert_image_to_non_transparent_outline_with_clahe(filename, lower_threshold, upper_threshold)
         return send_from_directory(os.getcwd(), converted_image_path)
     return render_template('index.html')
 
