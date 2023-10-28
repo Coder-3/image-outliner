@@ -6,13 +6,32 @@ import numpy as np
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads/'
 
-def convert_image_to_non_transparent_outline_with_clahe(image_path, lower_threshold, upper_threshold):
+def flexible_image_processing(image_path, lower_threshold, upper_threshold, 
+                              increase_contrast=False, use_bilateral=False, 
+                              use_adaptive=False, use_dilate_erode=False):
     image = cv2.imread(image_path, cv2.IMREAD_COLOR)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    contrasted = clahe.apply(gray)
-    blurred = cv2.GaussianBlur(contrasted, (5, 5), 0)
-    edges = cv2.Canny(blurred, lower_threshold, upper_threshold)
+    
+    if increase_contrast:
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        gray = clahe.apply(gray)
+    
+    if use_bilateral:
+        gray = cv2.bilateralFilter(gray, d=9, sigmaColor=75, sigmaSpace=75)
+    
+    if use_adaptive:
+        gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                     cv2.THRESH_BINARY, 11, 2)
+    else:
+        gray = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    edges = cv2.Canny(gray, lower_threshold, upper_threshold)
+    
+    if use_dilate_erode:
+        kernel = np.ones((3, 3), np.uint8)
+        edges = cv2.dilate(edges, kernel, iterations=1)
+        edges = cv2.erode(edges, kernel, iterations=1)
+    
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     outline = 255 * np.ones_like(gray)
     cv2.drawContours(outline, contours, -1, (0, 0, 0), 2)
@@ -30,9 +49,19 @@ def index():
         file = request.files['file']
         lower_threshold = int(request.form.get('lower_threshold', 50))
         upper_threshold = int(request.form.get('upper_threshold', 150))
+        
+        increase_contrast = request.form.get('increase_contrast') == 'true'
+        use_bilateral = request.form.get('use_bilateral') == 'true'
+        use_adaptive = request.form.get('use_adaptive') == 'true'
+        use_dilate_erode = request.form.get('use_dilate_erode') == 'true'
+        
         filename = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filename)
-        converted_image_path = convert_image_to_non_transparent_outline_with_clahe(filename, lower_threshold, upper_threshold)
+        
+        converted_image_path = flexible_image_processing(filename, lower_threshold, upper_threshold, 
+                                                         increase_contrast, use_bilateral, 
+                                                         use_adaptive, use_dilate_erode)
+        
         return send_from_directory(os.getcwd(), converted_image_path)
     return render_template('index.html')
 
