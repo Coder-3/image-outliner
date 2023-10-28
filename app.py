@@ -31,7 +31,7 @@ def index():
         filename = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filename)
         converted_image_path = convert_image_to_non_transparent_outline(filename, lower_threshold, upper_threshold)
-        return send_from_directory(directory=os.getcwd(), filename=converted_image_path)
+        return send_from_directory(os.getcwd(), converted_image_path)
     return render_template('index.html')
 
 if __name__ == '__main__':
