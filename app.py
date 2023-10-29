@@ -37,7 +37,7 @@ def flexible_image_processing(image_path, lower_threshold, upper_threshold,
     cv2.drawContours(outline, contours, -1, (0, 0, 0), 2)
 
     output_path = os.path.join(UPLOAD_FOLDER, "outlined_" + os.path.basename(image_path))
-    cv2.imwrite(output_path, outline)
+    cv2.imwrite(output_path, outline, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
 
     return output_path
 
@@ -47,16 +47,30 @@ def index():
         if not os.path.exists(UPLOAD_FOLDER):
             os.makedirs(UPLOAD_FOLDER)
         file = request.files['file']
-        lower_threshold = int(request.form.get('lower_threshold', 50))
-        upper_threshold = int(request.form.get('upper_threshold', 150))
-        
-        increase_contrast = request.form.get('increase_contrast') == 'true'
-        use_bilateral = request.form.get('use_bilateral') == 'true'
-        use_adaptive = request.form.get('use_adaptive') == 'true'
-        use_dilate_erode = request.form.get('use_dilate_erode') == 'true'
-        
         filename = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filename)
+
+        lower_threshold = 50
+        upper_threshold = 150
+        increase_contrast = False
+        use_bilateral = False
+        use_adaptive = False
+        use_dilate_erode = False
+        
+        preset = request.form.get('preset')
+        
+        if preset == 'High noise image':
+            use_bilateral = True
+        elif preset == 'Low contrast image':
+            increase_contrast = True
+            lower_threshold = 30
+        else:
+            lower_threshold = int(request.form.get('lower_threshold', 50))
+            upper_threshold = int(request.form.get('upper_threshold', 150))
+            increase_contrast = request.form.get('increase_contrast') == 'true'
+            use_bilateral = request.form.get('use_bilateral') == 'true'
+            use_adaptive = request.form.get('use_adaptive') == 'true'
+            use_dilate_erode = request.form.get('use_dilate_erode') == 'true'
         
         converted_image_path = flexible_image_processing(filename, lower_threshold, upper_threshold, 
                                                          increase_contrast, use_bilateral, 

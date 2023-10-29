@@ -9,24 +9,34 @@
         <input type="file" name="file" required><br><br>
         
         <label for="lower_threshold">Lower Threshold:</label>
-        <input type="number" name="lower_threshold" value="50"><br><br>
+        <input type="number" name="lower_threshold" value="50">
+        <p>Defines the lower boundary for edges. Decrease if few edges are detected; increase if too many are detected.</p>
         
         <label for="upper_threshold">Upper Threshold:</label>
-        <input type="number" name="upper_threshold" value="150"><br><br>
+        <input type="number" name="upper_threshold" value="150">
+        <p>Defines the upper boundary for edges. Adjust based on image clarity.</p><br>
         
         <label for="increase_contrast">Increase Contrast:</label>
-        <input type="checkbox" name="increase_contrast" value="true"><br><br>
+        <input type="checkbox" name="increase_contrast" value="true">
+        <p>Useful for images with low contrast. Increases the difference between the lightest and darkest parts of the image.</p><br>
         
         <label for="use_bilateral">Use Bilateral Filtering:</label>
-        <input type="checkbox" name="use_bilateral" value="true"><br><br>
+        <input type="checkbox" name="use_bilateral" value="true">
+        <p>Reduces noise while keeping edges sharp. Useful for high-noise images.</p><br>
         
         <label for="use_adaptive">Use Adaptive Thresholding:</label>
-        <input type="checkbox" name="use_adaptive" value="true"><br><br>
+        <input type="checkbox" name="use_adaptive" value="true">
+        <p>Calculates thresholds dynamically for different regions of the image. Useful for images with varying lighting conditions.</p><br>
         
         <label for="use_dilate_erode">Use Dilate & Erode:</label>
-        <input type="checkbox" name="use_dilate_erode" value="true"><br><br>
-
-        <input type="submit" value="Convert">
+        <input type="checkbox" name="use_dilate_erode" value="true">
+        <p>Enhances the quality of the outlines. Erosion reduces the size of foreground objects, and dilation increases it.</p><br>
+        
+        <input type="submit" value="Convert"><br><br>
+        
+        <input type="submit" name="preset" value="High noise image">
+        <input type="submit" name="preset" value="Low contrast image">
+        <p>Use the above presets for quick configurations based on the image type.</p>
     </form>
 </body>
 </html>
