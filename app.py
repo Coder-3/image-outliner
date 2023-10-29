@@ -36,9 +36,16 @@ def flexible_image_processing(image_path, lower_threshold, upper_threshold,
     outline = 255 * np.ones_like(gray)
     cv2.drawContours(outline, contours, -1, (0, 0, 0), 2)
 
-    output_path = os.path.join(UPLOAD_FOLDER, "outlined_" + os.path.basename(image_path))
-    cv2.imwrite(output_path, outline, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
+    file_extension = os.path.splitext(image_path)[1].lower()
 
+    if file_extension == ".png":
+        output_path = os.path.join(UPLOAD_FOLDER, "outlined_" + os.path.basename(image_path))
+        cv2.imwrite(output_path, outline, [int(cv2.IMWRITE_PNG_COMPRESSION), 3])
+    else:
+        output_name = "outlined_" + os.path.splitext(os.path.basename(image_path))[0] + ".jpg"
+        output_path = os.path.join(UPLOAD_FOLDER, output_name)
+        cv2.imwrite(output_path, outline, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
+    
     return output_path
 
 @app.route('/', methods=['GET', 'POST'])

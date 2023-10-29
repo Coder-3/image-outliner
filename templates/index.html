@@ -1,42 +1,135 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Image Outline Converter</title>
-</head>
-<body>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 40px auto;
+        max-width: 650px;
+        background-color: #fff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      h2,
+      h3 {
+        color: #333;
+      }
+      label {
+        display: block;
+        margin-bottom: 4px;
+        color: #666;
+      }
+      p {
+        margin-bottom: 16px;
+        margin-top: 0;
+        color: #888;
+      }
+      input[type="text"],
+      input[type="number"],
+      textarea,
+      input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+      input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+      }
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+      input[type="checkbox"] {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Image Outline Converter</h2>
     <form action="/" method="post" enctype="multipart/form-data">
-        <label for="file">Choose an image:</label>
-        <input type="file" name="file" required><br><br>
-        
-        <label for="lower_threshold">Lower Threshold:</label>
-        <input type="number" name="lower_threshold" value="50">
-        <p>Defines the lower boundary for edges. Decrease if few edges are detected; increase if too many are detected.</p>
-        
-        <label for="upper_threshold">Upper Threshold:</label>
-        <input type="number" name="upper_threshold" value="150">
-        <p>Defines the upper boundary for edges. Adjust based on image clarity.</p><br>
-        
-        <label for="increase_contrast">Increase Contrast:</label>
-        <input type="checkbox" name="increase_contrast" value="true">
-        <p>Useful for images with low contrast. Increases the difference between the lightest and darkest parts of the image.</p><br>
-        
-        <label for="use_bilateral">Use Bilateral Filtering:</label>
-        <input type="checkbox" name="use_bilateral" value="true">
-        <p>Reduces noise while keeping edges sharp. Useful for high-noise images.</p><br>
-        
-        <label for="use_adaptive">Use Adaptive Thresholding:</label>
-        <input type="checkbox" name="use_adaptive" value="true">
-        <p>Calculates thresholds dynamically for different regions of the image. Useful for images with varying lighting conditions.</p><br>
-        
-        <label for="use_dilate_erode">Use Dilate & Erode:</label>
-        <input type="checkbox" name="use_dilate_erode" value="true">
-        <p>Enhances the quality of the outlines. Erosion reduces the size of foreground objects, and dilation increases it.</p><br>
-        
-        <input type="submit" value="Convert"><br><br>
-        
-        <input type="submit" name="preset" value="High noise image">
-        <input type="submit" name="preset" value="Low contrast image">
-        <p>Use the above presets for quick configurations based on the image type.</p>
+      <label for="file">Choose an image:</label>
+      <input type="file" name="file" required /><br />
+
+      <label for="lower_threshold">Lower Threshold:</label>
+      <input type="number" name="lower_threshold" value="50" />
+      <p>
+        Defines the lower boundary for edges. Decrease if few edges are
+        detected; increase if too many are detected.
+      </p>
+
+      <label for="upper_threshold">Upper Threshold:</label>
+      <input type="number" name="upper_threshold" value="150" />
+      <p>
+        Defines the upper boundary for edges. Adjust based on image clarity.
+      </p>
+
+      <h3>Optimizations</h3>
+
+      <label for="increase_contrast">
+        <input type="checkbox" name="increase_contrast" value="true" />
+        Increase Contrast
+      </label>
+      <p>
+        Useful for images with low contrast. Increases the difference between
+        the lightest and darkest parts of the image.
+      </p>
+
+      <label for="use_bilateral">
+        <input type="checkbox" name="use_bilateral" value="true" />
+        Use Bilateral Filtering
+      </label>
+      <p>
+        Reduces noise while keeping edges sharp. Useful for high-noise images.
+      </p>
+
+      <label for="use_adaptive">
+        <input type="checkbox" name="use_adaptive" value="true" />
+        Use Adaptive Thresholding
+      </label>
+      <p>
+        Calculates thresholds dynamically for different regions of the image.
+        Useful for images with varying lighting conditions.
+      </p>
+
+      <label for="use_dilate_erode">
+        <input type="checkbox" name="use_dilate_erode" value="true" />
+        Use Dilate & Erode
+      </label>
+      <p>
+        Enhances the quality of the outlines. Erosion reduces the size of
+        foreground objects, and dilation increases it.
+      </p>
+
+      <br />
+      <input type="submit" value="Convert" /><br /><br />
+
+      <h3>Presets</h3>
+      <input
+        type="submit"
+        name="preset"
+        value="High noise image"
+        style="background-color: #007bff"
+      />
+      <input
+        type="submit"
+        name="preset"
+        value="Low contrast image"
+        style="background-color: #007bff"
+      />
+      <p>
+        Use the above presets for quick configurations based on the image type.
+      </p>
     </form>
-</body>
+  </body>
 </html>
