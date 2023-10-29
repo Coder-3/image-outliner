@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image Outline Converter</title>
     <style>
       body {
@@ -53,6 +54,24 @@
       input[type="checkbox"] {
         margin-right: 10px;
       }
+
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 20px 30px;
+          margin: 20px auto;
+        }
+        h2 {
+          font-size: 1.4em;
+        }
+        h3 {
+          font-size: 1.2em;
+        }
+        input[type="submit"] {
+          padding: 10px 18px;
+          font-size: 14px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -64,14 +83,18 @@
       <label for="lower_threshold">Lower Threshold:</label>
       <input type="number" name="lower_threshold" value="50" />
       <p>
-        Defines the lower boundary for edges. Decrease if few edges are
-        detected; increase if too many are detected.
+        Defines the lower boundary for edges. If the image has low contrast or
+        if edges are faint, increasing this value can help improve edge
+        detection. Conversely, if too many undesired edges are detected,
+        decrease this value.
       </p>
 
       <label for="upper_threshold">Upper Threshold:</label>
       <input type="number" name="upper_threshold" value="150" />
       <p>
-        Defines the upper boundary for edges. Adjust based on image clarity.
+        Defines the upper boundary for edges. Adjust this based on image
+        clarity. A higher value will detect stronger and more definite edges,
+        while a lower value might detect softer edges.
       </p>
 
       <h3>Optimizations</h3>
@@ -81,8 +104,9 @@
         Increase Contrast
       </label>
       <p>
-        Useful for images with low contrast. Increases the difference between
-        the lightest and darkest parts of the image.
+        Useful for images with low contrast or if the subject doesn't stand out.
+        This option increases the difference between the lightest and darkest
+        parts of the image, making edges more distinct.
       </p>
 
       <label for="use_bilateral">
@@ -90,7 +114,9 @@
         Use Bilateral Filtering
       </label>
       <p>
-        Reduces noise while keeping edges sharp. Useful for high-noise images.
+        Helps in reducing noise while keeping edges sharp. If the image has a
+        lot of small details or "graininess", this option can help in making the
+        outlines smoother.
       </p>
 
       <label for="use_adaptive">
@@ -98,8 +124,10 @@
         Use Adaptive Thresholding
       </label>
       <p>
-        Calculates thresholds dynamically for different regions of the image.
-        Useful for images with varying lighting conditions.
+        Calculates thresholds for edge detection dynamically across different
+        regions of the image. This is especially useful for images with varying
+        lighting conditions or shadows, as it helps in detecting edges uniformly
+        throughout the image.
       </p>
 
       <label for="use_dilate_erode">
@@ -107,8 +135,9 @@
         Use Dilate & Erode
       </label>
       <p>
-        Enhances the quality of the outlines. Erosion reduces the size of
-        foreground objects, and dilation increases it.
+        Enhances the quality and clarity of the outlines. If the outlines appear
+        broken or too thin, this option can make them more continuous and
+        pronounced.
       </p>
 
       <br />
